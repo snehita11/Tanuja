@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Credit Card Fraud Detection</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: #fff;
+    }
+
+    .container {
+      background: #ffffff10;
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      padding: 30px;
+      width: 400px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #f1f1f1;
+    }
+
+    label {
+      display: block;
+      margin: 10px 0 5px;
+      font-weight: 500;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #00c6ff;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+      color: #fff;
+    }
+
+    button:hover {
+      background: #0072ff;
+    }
+
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .safe {
+      background: rgba(0, 255, 0, 0.2);
+      color: #00ff88;
+    }
+
+    .fraud {
+      background: rgba(255, 0, 0, 0.2);
+      color: #ff4d4d;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Fraud Detection System</h2>
+    <form id="fraudForm">
+      <label for="amount">Transaction Amount ($)</label>
+      <input type="number" id="amount" required>
+
+      <label for="location">Location</label>
+      <input type="text" id="location" required>
+
+      <label for="time">Transaction Time (HH:MM)</label>
+      <input type="time" id="time" required>
+
+      <button type="submit">Check Transaction</button>
+    </form>
+    <div id="result" class="result"></div>
+  </div>
+
+  <script>
+    document.getElementById("fraudForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const amount = parseFloat(document.getElementById("amount").value);
+      const location = document.getElementById("location").value.trim().toLowerCase();
+      const time = document.getElementById("time").value;
+
+      let riskScore = 0;
+
+      // Simple fraud detection rules
+      if (amount > 1000) riskScore += 50; // Large transaction
+      if (location !== "home" && location !== "trusted store") riskScore += 30; // Unknown location
+      const hour = parseInt(time.split(":")[0]);
+      if (hour < 6 || hour > 22) riskScore += 20; // Odd hours
+
+      const resultDiv = document.getElementById("result");
+      if (riskScore >= 50) {
+        resultDiv.textContent = "⚠️ Fraudulent Transaction Detected!";
+        resultDiv.className = "result fraud";
+      } else {
+        resultDiv.textContent = "✅ Transaction is Safe.";
+        resultDiv.className = "result safe";
+      }
+    });
+  </script>
+</body>
+</html>
